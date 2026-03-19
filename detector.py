@@ -1,13 +1,21 @@
-failed_logins = {}
-THRESHOLD = 5
+import os
 
-with open("auth.log", "r") as file:
+failed_logins = {}
+LOG_FILE = "auth.log"
+THRESHOLD = 5
+IP_INDEX = 12
+
+if not os.path.exists(LOG_FILE):
+    print(f"Error: {LOG_FILE} not found.")
+    exit()
+
+with open(LOG_FILE, "r") as file:
     for line in file:
         line = line.strip()
 
         if "Failed password" in line:
             parts = line.split()
-            ip = parts[12] 
+            ip = parts[IP_INDEX] 
             timestamp = f"{parts[0]} {parts[1]} {parts[2]}"
 
             if ip not in failed_logins:
